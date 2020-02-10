@@ -1,0 +1,23 @@
+type Post {
+  id: Int
+  title: String
+}
+
+input UserInput {
+  name: String
+}
+
+type User {
+  id: Int
+  name: String
+  posts: [Post] @proxy(get: "http://localhost:5620/users/$id/posts")
+}
+
+type Query {
+  users: [User] @proxy(get: "/users")
+}
+
+type Mutation {
+  createUser(user: UserInput): User @proxy(post: "/users")
+  updateUser(id: Int!, user: UserInput!): User @proxy(patch: "/users")
+}
